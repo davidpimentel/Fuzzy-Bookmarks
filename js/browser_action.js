@@ -1,32 +1,17 @@
 $(document).ready(function() {
-  var bookmarks = [];
+  var bookmarks;
   var fuse;
-  var fuseOptions = {
-      keys: ["title", "url"]
-  };
 
-  chrome.bookmarks.getTree(function(bookmarkTree) {
-    for (var i = 0; i < bookmarkTree.length; i++) {
-      processBookmarks("", bookmarkTree[i]);
+  chrome.storage.local.get("bookmarks", function(result) {
+    if (result.bookmarks !== undefined) {
+      bookmarks = result.bookmarks;
+      var fuseOptions = {
+        keys: ["title", "url"]
+      };
+      fuse = new Fuse(bookmarks, fuseOptions);
+      listenForInput();
     }
-    fuse = new Fuse(bookmarks, fuseOptions);
-    listenForInput();
   });
-
-  function processBookmarks(parentPath, node) {
-    if (node.url !== undefined) { //is bookmark
-      var title = parentPath + node.title;
-      var url = node.url.startsWith("http") ? node.url : undefined;
-      bookmarks.push({title: title, url: url, id: node.id});
-      return;
-    } else if (node.children !== undefined) {
-      var path = parentPath + node.title + "/";
-      for (var i = 0, count = node.children.length; i < count; i++) {
-        processBookmarks(path, node.children[i]);
-      }
-
-    }
-  }
 
   function fuzzySearch(text) {
     return Promise.resolve(fuse.search(text));
