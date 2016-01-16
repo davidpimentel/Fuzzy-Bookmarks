@@ -1,11 +1,28 @@
-chrome.runtime.onInstalled.addListener(function () {
-  cacheBookmarks();
+chrome.commands.onCommand.addListener(function(command) {
+  if (command == "open-popup") {
+    chrome.windows.getCurrent(function(w) {
+      var windowHeight = w.height;
+      var windowWidth = w.width;
+      var windowTop = w.top;
+      var windowLeft = w.left;
+
+      var popupWidth = 400;
+      var popupHeight = 200;
+      var popupLeft = Math.floor((windowLeft + windowWidth / 2) - popupWidth / 2);
+      var popupTop = Math.floor((windowTop + windowHeight / 2) - popupHeight / 2);
+      chrome.windows.create({
+        "url": chrome.extension.getURL("src/bookmark_popup.html"),
+        "type": "popup",
+        "left": popupLeft,
+        "top": popupTop,
+        "width": popupWidth,
+        "height": popupHeight});
+    });
+  }
 });
 
-chrome.runtime.onStartup.addListener(function() {
-  cacheBookmarks();
-});
-
+chrome.runtime.onInstalled.addListener(cacheBookmarks);
+chrome.runtime.onStartup.addListener(cacheBookmarks);
 chrome.bookmarks.onCreated.addListener(cacheBookmarks);
 chrome.bookmarks.onRemoved.addListener(cacheBookmarks);
 chrome.bookmarks.onChanged.addListener(cacheBookmarks);

@@ -4,10 +4,22 @@
     width: 400px;
     font-family: Helvetica, Ubuntu, Arial, sans-serif;
 }
-  h1 {
-    font-size: 2em;
-  }
+
+h1 {
+  font-size: 2em;
+}
+
+input {
+  margin: auto;
+  width: 50%;
+  display: block;
+}
+
+li {
+  list-style-type: none;
+  margin: 10px;
+}
 
 li.active {
-  font-weight: bold;
+  background-color: #f6f6f6;
 }

@@ -27,7 +27,6 @@ $(document).ready(function() {
       .map(function (e) {
         return e.target.value;
       })
-      .debounce(250)
       .distinctUntilChanged();
 
     var commandKeypress = Rx.Observable.fromEvent(input, 'keydown')
@@ -53,15 +52,17 @@ $(document).ready(function() {
         results.empty();
 
         $.each(data, function(i, value) {
-          $('<li>' + value.title + '</li>').appendTo(results);
+          $("<li>" +
+              "<div>" + value.title + "</div>" +
+              "<div>" + value.url + "</div>" +
+            "</li>")
+          .appendTo(results);
         });
         highlightSelectedBookmark();
       },
       function (error) {
         // Handle any errors
         results.empty();
-
-        $('<li>Error: ' + error + '</li>').appendTo(results);
     });
 
     var commandSubscription = commandKeypress.subscribe(
@@ -97,5 +98,11 @@ $(document).ready(function() {
     $("#results > li").removeClass("active");
     $("#results > li:nth-child(" + activeBookmarkIndex + ")").addClass("active");
   }
+
+  $(document).keyup(function(e) {
+     if (e.keyCode == 27) { // escape key
+        window.close();
+    }
+});
 
 });

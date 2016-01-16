@@ -8,19 +8,15 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "browser_action": {
-    "default_icon": "icons/icon19.png",
-    "default_title": "browser action demo",
-    "default_popup": "src/browser_action.html"
-  },
   "commands": {
-    "_execute_browser_action": {
+    "open-popup": {
       "suggested_key": {
         "windows": "Ctrl+B",
         "mac": "Command+B",
         "chromeos": "Ctrl+B",
         "linux": "Ctrl+B"
-      }
+      },
+      "description": "open bookmark search popup"
     }
     },
   "background": {
